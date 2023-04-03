@@ -8,6 +8,8 @@
 	# Task 3: Practice the use of conditions,
 		# 1. If the user inputs from Task 1 are equal to each other, output "User inputs are the same"
 		# 2. If the two user inputs from Task 1 are not equal to each other, output "User inputs are different"
+# Github Repository: https://github.com/arianave/MIPS-Project-1.git
+
 
 .data
 # Declaring header strings
@@ -17,6 +19,7 @@ add_header: .asciiz "\n--Addition--"
 sub_header: .asciiz "\n--Subtraction--"
 multi_header: .asciiz "\n--Multiplication--"
 div_header: .asciiz "\n--Division--"
+r: .asciiz " R: "
 
 # Declaring strings for user input
 firstNum: .asciiz	"Type first Integer: "
@@ -24,7 +27,8 @@ secondNum: .asciiz	"Type second Integer: "
 
 # Declarings strings for returns
 result: .asciiz "\nFinal result is equal to \n"
-remainder: .asciiz " R: "
+same: .asciiz "\n\nUser inputs are the same\n"
+diff: .asciiz "\n\nUser inputs are different\n"
 
 .text
 main:
@@ -103,6 +107,7 @@ main:
 	la $a0, ($t3)
 	syscall
 
+
         # Printing div_header
         li $v0, 4
         la $a0, div_header
@@ -123,12 +128,35 @@ main:
 	syscall
 
 	li $v0, 4
-	la $a0, remainder     #prints out remainder string
+	la $a0, r     #prints out remainder string
 	syscall
 
 	li $v0, 1
 	la $a0, ($s3) #prints out the remainder
 	syscall
+
+
+# Comparing user inputs
+	# Checking if user inputs are the same
+	#beq
+	beq $s0, $s1, equal
+
+	# Checking if use inputs are different
+	#bne
+	bne $s0, $s1, notEqual
+
+	equal:  #will print this section of code saying that user inputs are the same
+	li $v0, 4
+	la $a0, same
+	syscall
+
+	j exit #this will prevent the code from also going through the notEqual code if the two user inputs are equal and will instead exit the program
+
+	notEqual: #will print this section of code saying that user inputs are different
+	li $v0, 4
+	la $a0, diff
+	syscall
+
 
 exit: 	# Exits program
 	li $v0, 10
