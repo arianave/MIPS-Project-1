@@ -13,9 +13,18 @@
 # Declaring header strings
 info: .asciiz	"This program will ask for two ints and perfom the following operations: addition, subtraction, mulitplication, and division\n"
 
+add_header: .asciiz "\n--Addition--"
+sub_header: .asciiz "\n--Subtraction--"
+multi_header: .asciiz "\n--Multiplication--"
+div_header: .asciiz "\n--Division--"
+
 # Declaring strings for user input
 firstNum: .asciiz	"Type first Integer: "
 secondNum: .asciiz	"Type second Integer: "
+
+# Declarings strings for returns
+result: .asciiz "\nFinal result is equal to \n"
+remainder: .asciiz " R: "
 
 .text
 main:
@@ -45,6 +54,81 @@ main:
 	syscall
 	move $s1, $v0		#Int2 is held in $s1
 
+# Printing the arthithemtic operations
+	# Printing add_header
+        li $v0, 4
+        la $a0, add_header
+        syscall
+
+	# Adding firstNum and secondNum
+	add $t1, $s0, $s1	# Storing add result in $t1
+
+	li $v0, 4
+	la $a0, result
+	syscall
+
+	li $v0, 1
+	la $a0, ($t1)
+	syscall
+
+	# Printing sub_header
+	li $v0, 4
+        la $a0, sub_header
+        syscall
+
+        # Subtraction firstNum and secondNum
+        sub $t2, $s0, $s1	# Storing sub result in $t2
+
+	li $v0, 4
+	la $a0, result
+	syscall
+
+	li $v0, 1
+	la $a0, ($t2)
+	syscall
+
+        # Printing multi_header
+        li $v0, 4
+        la $a0, multi_header
+        syscall
+
+        # Multiplying firstnum and secondNum
+        mul $t3, $s0, $s1	# Storing mul result in $t3
+
+	li $v0, 4
+	la $a0, result
+	syscall
+
+	li $v0, 1
+	la $a0, ($t3)
+	syscall
+
+        # Printing div_header
+        li $v0, 4
+        la $a0, div_header
+        syscall
+
+        # Dividing firstNum and secondNum
+        div $s0, $s1	# dividing first and second integer
+
+        mflo $s2 #quotient
+        mfhi $s3 #remainder
+
+	li $v0, 4	#prints out the result string
+	la $a0, result
+	syscall
+
+	li $v0, 1
+	la $a0, ($s2) #prints out quotient
+	syscall
+
+	li $v0, 4
+	la $a0, remainder     #prints out remainder string
+	syscall
+
+	li $v0, 1
+	la $a0, ($s3) #prints out the remainder
+	syscall
 
 exit: 	# Exits program
 	li $v0, 10
